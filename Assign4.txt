@@ -1,0 +1,162 @@
+mysql> CREATE TABLE WORKERS (ID INT UNIQUE, LastName varchar(50), FirstName varchar(50));     ---- Creating a table using UNIQUE key
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> desc WORKERS;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| ID        | int         | YES  | UNI | NULL    |       |
+| LastName  | varchar(50) | YES  |     | NULL    |       |
+| FirstName | varchar(50) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> INSERT INTO WORKERS VALUES(NULL,'A','B');   ------------------------------------------------ NULL value allowed in unique key
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO WORKERS VALUES(1,'C','D');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO WORKERS VALUES(1,'E','F');      ------------------------------------------------ Duplicate value is not allowed in unique key
+ERROR 1062 (23000): Duplicate entry '1' for key 'WORKERS.ID'
+mysql> INSERT INTO WORKERS VALUES(2,'E','F');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> DESC WORKERS;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| ID        | int         | YES  | UNI | NULL    |       |
+| LastName  | varchar(50) | YES  |     | NULL    |       |
+| FirstName | varchar(50) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> ALTER TABLE WORKERS ADD UNIQUE (LastName);   ------------------------------------------------ Creating unique Key using alter command
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc WORKERS;      -------------------------------------------------------------------------- One table can contain multiple unique keys
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| ID        | int         | YES  | UNI | NULL    |       |
+| LastName  | varchar(50) | YES  | UNI | NULL    |       |
+| FirstName | varchar(50) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> ALTER TABLE WORKERS MODIFY COLUMN LastName varchar(50) NOT NULL;    ------------------------- Trying to convert unique key from NULL to NOT NULL
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESC WORKERS;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| ID        | int         | YES  | UNI | NULL    |       |
+| LastName  | varchar(50) | NO   | PRI | NULL    |       | ----------------------------------------- Unique key that did not allowed duplicates is known as primary key
+| FirstName | varchar(50) | YES  |     | NULL    |       |                                             Hence 'LastName' is converted into primary key
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> ALTER TABLE WORKERS MODIFY COLUMN ID INT NOT NULL;
+ERROR 1138 (22004): Invalid use of NULL value    --------------------------------------------------- ID is not converted into "NOT NULL" because ID contains "NULL" value
+mysql> SELECT * FROM WORKERS;
++------+----------+-----------+
+| ID   | LastName | FirstName |
++------+----------+-----------+
+| NULL | A        | B         |
+|    1 | C        | D         |
+|    2 | E        | F         |
++------+----------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> DELETE FROM WORKERS WHERE LastName='A';   ---------------------------------------------------- deleting "NULL" ID record
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM WORKERS;
++------+----------+-----------+
+| ID   | LastName | FirstName |
++------+----------+-----------+
+|    1 | C        | D         |
+|    2 | E        | F         |
++------+----------+-----------+
+2 rows in set (0.00 sec)
+
+mysql> ALTER TABLE WORKERS MODIFY COLUMN ID INT NOT NULL;    ----------------------------------------  ID is converted into "NOT NULL" from "NULL"
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc WORKERS;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| ID        | int         | NO   | UNI | NULL    |       |   ---------------------------------------- ID can't become primary key because one table contains only one primary key
+| LastName  | varchar(50) | NO   | PRI | NULL    |       |
+| FirstName | varchar(50) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+
+
+
+
+--------------  CANDIDATE KEY -------------------------
+
+     No specific syntax for candidate keys, because they are simply columns or combinations of columns that uniquely indefy rows.
+     
+     
+     
+     
+     
+     
+     
+--------------  COMPOSITE KEY -------------------------
+
+(A composite key is a combination of two or more columns that uniquely indentify each row in a table)
+
+mysql> CREATE TABLE DEMO  (ID INT, LastName varchar(50), FirstName varchar(50), Age int, primary key (FirstName,LastName));  ---- Creating candidate key
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc DEMO;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| ID        | int         | YES  |     | NULL    |       |
+| LastName  | varchar(50) | NO   | PRI | NULL    |       |
+| FirstName | varchar(50) | NO   | PRI | NULL    |       |
+| Age       | int         | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+     
+mysql> insert into DEMO values (24, 'More', 'Aditya', 19), (34, 'Pangavhane', 'Adi------------------------------------------------ Inserting values
+Query OK, 2 rows affected (0.02 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> insert into DEMO values (24, 'More', 'Sushant', 29), (34, 'Pangavhane', 'Shreyas', 39);
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> insert into DEMO values (29, 'Ghorpade', 'Sushant', 99), (3, 'Pangavhane', 'Shreyas', 79);   ----------------------------- Trying to enter duplicate combination of composite key (Not allowed)
+ERROR 1062 (23000): Duplicate entry 'Shreyas-Pangavhane' for key 'DEMO.PRIMARY'
+mysql> select * from DEMO;
++------+------------+-----------+------+
+| ID   | LastName   | FirstName | Age  |
++------+------------+-----------+------+
+|   24 | More       | Aditya    |   19 |
+|   34 | Pangavhane | Aditya    |   19 |
+|   34 | Pangavhane | Shreyas   |   39 |
+|   24 | More       | Sushant   |   29 |
++------+------------+-----------+------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT * FROM DEMO WHERE FirstName='Shreyas' and LastName='Pangavhane';    ----------------------------------------------- Identifying row uniquely using composite key
++------+------------+-----------+------+
+| ID   | LastName   | FirstName | Age  |
++------+------------+-----------+------+
+|   34 | Pangavhane | Shreyas   |   39 |
++------+------------+-----------+------+
+1 row in set (0.00 sec)
+
+

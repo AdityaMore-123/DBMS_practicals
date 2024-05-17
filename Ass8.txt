@@ -1,0 +1,138 @@
+                                        TRIGGER ASSIGNMENT
+
+student@student-MS-7D48:~$ sudo mysql -u root -p
+[sudo] password for student:
+Enter password:
+Welcome to the MySQL monitor. Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.36-0ubuntu0.20.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database ARAMO;
+ERROR 1007 (HY000): Can't create database 'ARAMO'; database exists
+mysql> show databases;
++--------------------+
+| Database                 |
++--------------------+
+| ARAMO                      |
+| UCS22M1101                   |
+| UCS22M1134                   |
+| bank                |
+| harshal              |
+| information_schema |
+| mysql                 |
+| opk                |
+| performance_schema |
+| rtr           |
+| sid             |
+| srd             |
+| swapnil                |
+| sys              |
+| xyz               |
++--------------------+
+15 rows in set (0.01 sec)
+
+mysql> use ARAMO;
+Database changed
+mysql> show tables;
+Empty set (0.00 sec)
+
+mysql> create table Library (BookNo integer, BookName varchar(25), BookPublished varchar(25), BookCost
+integer);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create table Library_Audit (Id integer primary key auto_increment, operation varchar(25), operationtime
+varchar(25), BookNo integer, BookName varchar(25), BookPublished
+varchar(25), BookCost integer);
+Query OK, 0 rows affected (0.03 sec)
+mysql> insert into Library values (1,'DBMS','Springer',1000);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> source /home/student/trigger.sql
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> show triggers;
+   -> //
++---------+--------+---------
++-------------------------------------------------------------------------------------------------------------------------+--------
++------------------------
++-----------------------------------------------------------------------------------------------------------------------+----------------
++----------------------+----------------------+--------------------+
+| Trigger | Event | Table | Statement                                                                                          | Timing |
+Created              | sql_mode                                                                                      | Definer      |
+character_set_client | collation_connection | Database Collation |
++---------+--------+---------
++-------------------------------------------------------------------------------------------------------------------------+--------
++------------------------
++-----------------------------------------------------------------------------------------------------------------------+----------------
++----------------------+----------------------+--------------------+
+| T1     | UPDATE | Library | begin
+insert into Library_Audit
+values(NULL,'delete',Now(),old.BookNo,old.BookName,old.BookPublished,old.BookCost);
+end | BEFORE | 2024-04-24 14:18:21.71 |
+ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_
+DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION | root@localhost | utf8mb4                                              | utf8mb4_0900_ai_ci |
+utf8mb4_0900_ai_ci |
+| T2     | UPDATE | Library | begin
+insert into Library_Audit
+values(NULL,'update',Now(),old.BookNo,old.BookName,old.BookPublished,old.BookCost);
+end | BEFORE | 2024-04-24 14:23:15.35 |
+ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_
+DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION | root@localhost | utf8mb4                                              | utf8mb4_0900_ai_ci |
+utf8mb4_0900_ai_ci |
++---------+--------+---------
++-------------------------------------------------------------------------------------------------------------------------+--------
++------------------------
++-----------------------------------------------------------------------------------------------------------------------+----------------
++----------------------+----------------------+--------------------+
+2 rows in set (0.00 sec)
+
+mysql> update Library set BookNo=9 where BookNo=2;
+  -> //
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1 Changed: 1 Warnings: 0
+
+mysql> select * from Library_Audit;
+   -> //
++----+-----------+---------------------+--------+----------+---------------+----------+
+| Id | operation | operationtime       | BookNo | BookName | BookPublished | BookCost |
++----+-----------+---------------------+--------+----------+---------------+----------+
+| 1 | delete | 2024-04-24 14:19:45 |          1 | DBMS | Springer           | 1000 |
+| 2 | delete | 2024-04-24 14:21:32 | 20 | DBMS | Springer                    | 1000 |
+| 3 | delete | 2024-04-24 14:24:01 |          2 | DBMS | Springer           | 1000 |
+| 4 | update | 2024-04-24 14:24:01 |           2 | DBMS | Springer           | 1000 |
++----+-----------+---------------------+--------+----------+---------------+----------+
+4 rows in set (0.00 sec)
+
+mysql>
+
+
+
+
+                                                     NOTEPAD FILE
+
+    • FOR UPDATE
+delimiter //
+create trigger T2 before update on Library for each row
+begin
+insert into Library_Audit
+values(NULL,'update',Now(),old.BookNo,old.BookName,old.BookPublished,old.BookCost);
+end
+//
+
+    • FOR DELETE
+delimiter //
+create trigger T3 before delete on Library for each row
+begin
+insert into Library_Audit
+values(NULL,'delete',Now(),old.BookNo,old.BookName,old.BookPublished,old.BookCost);
+end
+//
+

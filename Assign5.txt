@@ -1,0 +1,430 @@
+mysql> use ARAMO;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> CREATE TABLE BRANCH (Branch_name varchar(50),Branch_city varchar(50), assets int);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> CREATE TABLE CUSTOMER (Customer_name varchar(50) primary key, City varchar(50), Street varchar(50));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> CREATE TABLE LOAN (Loan_no int primary key, Branch_name varchar(50), Amount int);
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> CREATE TABLE BORROWER (Customer_name varchar(50), Loan_no int, foreign key (Customer_name) references CUSTOMER(Customer_name), foreign key (Loan_no) references LOAN(Loan_no));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> CREATE TABLE AMOUNT (Acc_no int primary key, Branch_name varchar(50), Balance int);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> CREATE TABLE DEPOSITOR (Cust_name varchar(50), Acc_no int, FOREIGN KEY(Cust_name) references CUSTOMER(Customer_name), FOREIGN KEY(Acc_no) references AMOUNT(Acc_no));
+Query OK, 0 rows affected (0.05 sec)
+
+
+
+mysql> INSERT INTO BRANCH VALUES ('Babhaleshwar','Ahilyanagar',500000),('Kopargaon','Sanbhajinagar',700000),('Peryridge','Hongkong',900000);
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+
+
+mysql> select * from BRANCH;
++--------------+---------------+---------+
+| Branch_name  | Branch_city   | assets  |
++--------------+---------------+---------+
+| Babhaleshwar | Ahilyanagar   |  500000 |
+| Kopargaon    | Sanbhajinagar |  700000 |
+| Peryridge    | Hongkong      |  900000 |
+| Pune         | Pune          | 1000000 |
+| Rajuri       | Shrirampur    |  600000 |
++--------------+---------------+---------+
+5 rows in set (0.00 sec)
+
+mysql> UPDATE BRANCH SET assets=650000 where Branch_name='Pune';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from BRANCH;
++--------------+---------------+--------+
+| Branch_name  | Branch_city   | assets |
++--------------+---------------+--------+
+| Babhaleshwar | Ahilyanagar   | 500000 |
+| Kopargaon    | Sanbhajinagar | 700000 |
+| Peryridge    | Hongkong      | 900000 |
+| Pune         | Pune          | 650000 |
+| Rajuri       | Shrirampur    | 600000 |
++--------------+---------------+--------+
+5 rows in set (0.00 sec)
+
+
+
+mysql> Insert into LOAN values (23434,'Babhaleshwar',98000),(56432,'Kopargaon',96000),(87995,'Peryridge',120000);
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> Insert into LOAN values (23674,'Pune',98000),(56472,'Kopargaon',977000),(33995,'Peryridge',9430000);
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> Insert into LOAN values (23444,'Babhaleshwar',NULL),(56400,'Kopargaon',96000),(87900,'Babhaleshwar',NULL);
+Query OK, 3 rows affected (0.02 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+
+
+mysql> INSERT INTO CUSTOMER VALUES ('Aditya More','Babhaleshwar','Main Road'),('Kunal Pathak','Mamdapur','Vetalbaba Chowk'),('Sachin Pachore','Anchalgaon','near Main city');
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO CUSTOMER VALUES ('Aditya Pangavhane','Babhaleshwar','Main Road'),('Kunal Gadekar','Mamdapur','Vetalbaba Chowk'),('Sachin Tendulkar','Anchalgaon','near ');
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+
+
+mysql> INSERT INTO BORROWER VALUES ('Aditya More',23434),('Kunal Pathak',33995),('Sachin Pachore',56400);
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+
+
+mysql> INSERT INTO AMOUNT VALUES (8799,'Kopargaon',1050),(8888,'Peryridge',7000),(9909,'Babhaleshwar',900);
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO AMOUNT VALUES (8299,'Kopargaon',1090),(8883,'Peryridge',2000),(3909,'Peryridge',9000);
+Query OK, 3 rows affected (0.03 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+
+
+mysql> RENAME TABLE AMOUNT TO ACCOUNT;
+Query OK, 0 rows affected (0.04 sec)
+
+
+
+mysql> insert into DEPOSITOR values ('Aditya More',8799),('Kunal Pathak',9909),('Sachin Pachore',8299);
+Query OK, 3 rows affected (0.02 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+
+
+mysql> SELECT * FROM BRANCH;
++--------------+---------------+--------+
+| Branch_name  | Branch_city   | assets |
++--------------+---------------+--------+
+| Babhaleshwar | Ahilyanagar   | 500000 |
+| Kopargaon    | Sanbhajinagar | 700000 |
+| Peryridge    | Hongkong      | 900000 |
+| Pune         | Pune          | 650000 |
+| Rajuri       | Shrirampur    | 600000 |
++--------------+---------------+--------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER;
++-------------------+--------------+-----------------+
+| Customer_name     | City         | Street          |
++-------------------+--------------+-----------------+
+| Aditya More       | Babhaleshwar | Main Road       |
+| Aditya Pangavhane | Babhaleshwar | Main Road       |
+| Kunal Gadekar     | Mamdapur     | Vetalbaba Chowk |
+| Kunal Pathak      | Mamdapur     | Vetalbaba Chowk |
+| Sachin Pachore    | Anchalgaon   | near Main city  |
+| Sachin Tendulkar  | Anchalgaon   | near            |
++-------------------+--------------+-----------------+
+6 rows in set (0.00 sec)
+
+mysql> SELECT * FROM LOAN;
++---------+--------------+---------+
+| Loan_no | Branch_name  | Amount  |
++---------+--------------+---------+
+|   23434 | Babhaleshwar |   98000 |
+|   23444 | Babhaleshwar |    NULL |
+|   23674 | Pune         |   98000 |
+|   33995 | Peryridge    | 9430000 |
+|   56400 | Kopargaon    |   96000 |
+|   56432 | Kopargaon    |   96000 |
+|   56472 | Kopargaon    |  977000 |
+|   87900 | Babhaleshwar |    NULL |
+|   87995 | Peryridge    |  120000 |
++---------+--------------+---------+
+9 rows in set (0.00 sec)
+
+mysql> SELECT * FROM BORROWER;
++----------------+---------+
+| Customer_name  | Loan_no |
++----------------+---------+
+| Aditya More    |   23434 |
+| Kunal Pathak   |   33995 |
+| Sachin Pachore |   56400 |
+| Aditya More    |   87995 |
+| Kunal Pathak   |   87900 |
++----------------+---------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM ACCOUNT;
++--------+--------------+---------+
+| Acc_no | Branch_name  | Balance |
++--------+--------------+---------+
+|   3909 | Peryridge    |    9000 |
+|   8299 | Kopargaon    |    1090 |
+|   8799 | Kopargaon    |    1050 |
+|   8883 | Peryridge    |    2000 |
+|   8888 | Peryridge    |    7000 |
+|   9909 | Babhaleshwar |     900 |
++--------+--------------+---------+
+6 rows in set (0.00 sec)
+
+mysql> SELECT * FROM DEPOSITOR;
++----------------+--------+
+| Cust_name      | Acc_no |
++----------------+--------+
+| Aditya More    |   8799 |
+| Kunal Pathak   |   9909 |
+| Sachin Pachore |   8299 |
++----------------+--------+
+3 rows in set (0.00 sec)
+
+
+
+mysql> SELECT Branch_name from LOAN;    -------------------------------- 1. Find the names of all branches in loan relation :
++--------------+
+| Branch_name  |
++--------------+
+| Babhaleshwar |
+| Babhaleshwar |
+| Pune         |
+| Peryridge    |
+| Kopargaon    |
+| Kopargaon    |
+| Kopargaon    |
+| Babhaleshwar |
+| Peryridge    |
++--------------+
+9 rows in set (0.00 sec)
+
+
+
+mysql> SELECT DISTINCT Branch_name FROM LOAN;    ----------------------- 2. Find the names of all branches in loan relation and remove duplicates :
++--------------+
+| Branch_name  |
++--------------+
+| Babhaleshwar |
+| Pune         |
+| Peryridge    |
+| Kopargaon    |
++--------------+
+4 rows in set (0.01 sec)
+
+
+
+mysql> SELECT ALL Branch_name FROM LOAN;    ---------------------------- # Similar to 1.
++--------------+
+| Branch_name  |
++--------------+
+| Babhaleshwar |
+| Babhaleshwar |
+| Pune         |
+| Peryridge    |
+| Kopargaon    |
+| Kopargaon    |
+| Kopargaon    |
+| Babhaleshwar |
+| Peryridge    |
++--------------+
+9 rows in set (0.00 sec)
+
+
+
+mysql> SELECT Loan_no FROM LOAN WHERE Amount BETWEEN 90000 AND 100000;   ------- 3. Find loan number of those loans with loan amount between 90000 to 100000 :
++---------+
+| Loan_no |
++---------+
+|   23434 |
+|   23674 |
+|   56400 |
+|   56432 |
++---------+
+4 rows in set (0.00 sec)
+
+
+
+4. Find the name and loan number of all customers having loan at the Peryridge branch :
+mysql> SELECT B.Customer_name, B.Loan_no FROM BORROWER B, LOAN L WHERE L.Loan_no=B.Loan_no AND L.Branch_name='Peryridge';
++---------------+---------+
+| Customer_name | Loan_no |
++---------------+---------+
+| Kunal Pathak  |   33995 |
+| Aditya More   |   87995 |
++---------------+---------+
+2 rows in set (0.01 sec)
+
+
+
+mysql> SELECT B.Customer_name, B.Loan_no FROM BORROWER B, LOAN L WHERE L.Loan_no=B.Loan_no AND L.Branch_name='Pune';
+Empty set (0.00 sec)
+mysql> INSERT INTO BORROWER VALUES ('Sachin Tendulkar',23674);
+Query OK, 1 row affected (0.02 sec)
+
+
+
+5. Find the name and loan number of all customers having loan at the Pune branch :
+mysql> SELECT B.Customer_name, B.Loan_no FROM BORROWER B, LOAN L WHERE L.Loan_no=B.Loan_no AND L.Branch_name='Pune';
++------------------+---------+
+| Customer_name    | Loan_no |
++------------------+---------+
+| Sachin Tendulkar |   23674 |
++------------------+---------+
+1 row in set (0.00 sec)
+
+
+
+6. Find the customer name & their loan no. for all customer having a loan at some branch : 
+mysql> SELECT B.Customer_name, B.Loan_no FROM BORROWER B, LOAN L WHERE L.Loan_no=B.Loan_no;
++------------------+---------+
+| Customer_name    | Loan_no |
++------------------+---------+
+| Aditya More      |   23434 |
+| Kunal Pathak     |   33995 |
+| Sachin Pachore   |   56400 |
+| Aditya More      |   87995 |
+| Kunal Pathak     |   87900 |
+| Sachin Tendulkar |   23674 |
++------------------+---------+
+6 rows in set (0.00 sec)
+
+
+
+7. Similar to previous one with removing duplicate (but there is no duplicate row so tables remains same) :
+mysql> SELECT DISTINCT B.Customer_name, B.Loan_no FROM BORROWER B, LOAN L WHERE L.Loan_no=B.Loan_no;
++------------------+---------+
+| Customer_name    | Loan_no |
++------------------+---------+
+| Aditya More      |   23434 |
+| Kunal Pathak     |   33995 |
+| Sachin Pachore   |   56400 |
+| Aditya More      |   87995 |
+| Kunal Pathak     |   87900 |
+| Sachin Tendulkar |   23674 |
++------------------+---------+
+6 rows in set (0.00 sec)
+
+
+
+8. Find the name of all branches that have greater assets than some branches located in pune : 
+mysql> SELECT B.Branch_name FROM BRANCH B, BRANCH M WHERE B.assets > M.assets AND M.Branch_city='Pune';
++-------------+
+| Branch_name |
++-------------+
+| Kopargaon   |
+| Peryridge   |
++-------------+
+2 rows in set (0.00 sec)
+
+
+
+9. Find name of all customers whose street includes "Main" string : 
+mysql> SELECT Customer_name FROM CUSTOMER WHERE Street LIKE "%Main%";
++-------------------+
+| Customer_name     |
++-------------------+
+| Aditya More       |
+| Aditya Pangavhane |
+| Sachin Pachore    |
++-------------------+
+3 rows in set (0.00 sec)
+
+  
+  
+10. Find all the customer sho have loan, account and both : 
+mysql> (SELECT Cust_name FROM DEPOSITOR) UNION (SELECT Customer_name FROM BORROWER);
++------------------+
+| Cust_name        |
++------------------+
+| Aditya More      |
+| Kunal Pathak     |
+| Sachin Pachore   |
+| Sachin Tendulkar |
++------------------+
+4 rows in set (0.01 sec)
+
+
+
+11. Find the name of all customers whose name starts with letter "A" : 
+mysql> SELECT * FROM CUSTOMER WHERE Customer_name LIKE "A%";
++-------------------+--------------+-----------+
+| Customer_name     | City         | Street    |
++-------------------+--------------+-----------+
+| Aditya More       | Babhaleshwar | Main Road |
+| Aditya Pangavhane | Babhaleshwar | Main Road |
++-------------------+--------------+-----------+
+2 rows in set (0.00 sec)
+
+
+
+12. Find all the customers who have account but no loan : 
+mysql>  SELECT Cust_name FROM DEPOSITOR WHERE Cust_name NOT IN (SELECT Customer_name FROM BORROWER);
+Empty set (0.00 sec)
+
+
+
+13. Find the average account balance in Pune branch : 
+mysql> insert into ACCOUNT values (7893,'Pune',3000),(7348,'Pune',2000);
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> SELECT AVG (Balance) FROM ACCOUNT WHERE Branch_name='Pune';
++---------------+
+| AVG (Balance) |
++---------------+
+|     2500.0000 |
++---------------+
+1 row in set (0.00 sec)
+
+
+
+14. Find number of tuples in CUSTOMER relation : 
+mysql> SELECT COUNT(*) FROM CUSTOMER;
++----------+
+| COUNT(*) |
++----------+
+|        6 |
++----------+
+1 row in set (0.00 sec)
+
+
+
+15. Find number of depositors in the bank : 
+mysql> SELECT COUNT(DISTINCT Cust_name) FROM DEPOSITOR;
++---------------------------+
+| COUNT(DISTINCT Cust_name) |
++---------------------------+
+|                         3 |
++---------------------------+
+1 row in set (0.00 sec)
+
+
+
+16. Find number of depositors for each branch : 
+mysql> SELECT Branch_name, COUNT(DISTINCT Cust_name) FROM DEPOSITOR, ACCOUNT WHERE DEPOSITOR.Acc_no=ACCOUNT.Acc_no GROUP BY Branch_name;
++--------------+---------------------------+
+| Branch_name  | COUNT(DISTINCT Cust_name) |
++--------------+---------------------------+
+| Babhaleshwar |                         1 |
+| Kopargaon    |                         2 |
++--------------+---------------------------+
+2 rows in set (0.00 sec)
+
+
+
+17. Find the name of all branches where average account balance is more than 1200 :  
+mysql> SELECT Branch_name, AVG (Balance) FROM ACCOUNT GROUP BY Branch_name HAVING AVG(Balance) > 1200;
++-------------+---------------+
+| Branch_name | AVG (Balance) |
++-------------+---------------+
+| Peryridge   |     6000.0000 |
+| Pune        |     2500.0000 |
++-------------+---------------+
+2 rows in set (0.00 sec)
+

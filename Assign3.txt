@@ -1,0 +1,172 @@
+mysql> create database ARAMO;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> USE ARAMO;
+Database changed
+mysql> CREATE TABLE STUDENT(Rollno int primary key, Name varchar(50), Class varchar(50));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc STUDENT;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| Rollno | int         | NO   | PRI | NULL    |       |
+| Name   | varchar(50) | YES  |     | NULL    |       |
+| Class  | varchar(50) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> INSERT INTO STUDENT VALUES(93,'Aditya More','FY');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> INSERT INTO STUDENT VALUES(93,'Sushant More','FY');
+ERROR 1062 (23000): Duplicate entry '93' for key 'STUDENT.PRIMARY'
+mysql> INSERT INTO STUDENT VALUES(95,'Sushant More','FY');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO STUDENT VALUES(98,NULL,'FY');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO STUDENT VALUES(NULL,'Sachin Pachore','FY');
+ERROR 1048 (23000): Column 'Rollno' cannot be null
+
+mysql> SELECT * FROM STUDENT;
++--------+--------------+-------+
+| Rollno | Name         | Class |
++--------+--------------+-------+
+|     93 | Aditya More  | FY    |
+|     95 | Sushant More | FY    |
+|     98 | NULL         | FY    |
++--------+--------------+-------+
+3 rows in set (0.00 sec)
+
+
+
+mysql> CREATE TABLE COURSE (Roll int, Courseid int, Cname varchar(50), foreign key(Roll) references STUDENT(Rollno));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> desc COURSE;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| Roll     | int         | YES  | MUL | NULL    |       |
+| Courseid | int         | YES  |     | NULL    |       |
+| Cname    | varchar(50) | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> INSERT INTO COURSE VALUES(93,9925,'DBMS');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO COURSE VALUES (93,3344, 'ADS'),(95,9925,'DBMS');
+Query OK, 2 rows affected (0.02 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM COURSE;
++------+----------+-------+
+| Roll | Courseid | Cname |
++------+----------+-------+
+|   93 |     9925 | DBMS  |
+|   93 |     3344 | ADS   |
+|   95 |     9925 | DBMS  |
++------+----------+-------+
+3 rows in set (0.00 sec)
+
+mysql> INSERT INTO COURSE VALUES(99,9925,'DBMS');
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`ARAMO`.`COURSE`, CONSTRAINT `COURSE_ibfk_1` FOREIGN KEY (`Roll`) REFERENCES `STUDENT` (`Rollno`))
+
+mysql> SELECT NAME AS StudName FROM STUDENT,COURSE WHERE STUDENT.Rollno=COURSE.Roll;
++--------------+
+| StudName     |
++--------------+
+| Aditya More  |
+| Aditya More  |
+| Sushant More |
++--------------+
+3 rows in set (0.01 sec)
+
+mysql> SELECT NAME AS StudName FROM STUDENT,COURSE WHERE STUDENT.Rollno=COURSE.Roll AND COURSE.Cname='DBMS';
++--------------+
+| StudName     |
++--------------+
+| Aditya More  |
+| Sushant More |
++--------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT NAME AS StudName FROM STUDENT,COURSE WHERE STUDENT.Rollno=COURSE.Roll AND COURSE.Cname='ADS';
++-------------+
+| StudName    |
++-------------+
+| Aditya More |
++-------------+
+1 row in set (0.00 sec)
+
+
+
+
+-------------------- VIEWS -----------------------------
+
+mysql> INSERT INTO STUDENT VALUES (103,'Kunal Pathak','SY'),(100,'Aditya Pangavhane','TY');
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO STUDENT VALUES (74,'Kartik Kale','SY'),(101,'Shreyas Pangavhane','TY');
+Query OK, 2 rows affected (0.03 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> CREATE VIEW V1 AS SELECT Rollno,Name FROM STUDENT;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> SELECT * FROM V1;
++--------+--------------------+
+| Rollno | Name               |
++--------+--------------------+
+|     74 | Kartik Kale        |
+|     93 | Aditya More        |
+|     95 | Sushant More       |
+|     98 | NULL               |
+|    100 | Aditya Pangavhane  |
+|    101 | Shreyas Pangavhane |
+|    103 | Kunal Pathak       |
++--------+--------------------+
+7 rows in set (0.00 sec)
+
+mysql> CREATE VIEW V2 AS SELECT Rollno,Name FROM STUDENT WHERE Class='FY';
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> SELECT * FROM V2;
++--------+--------------+
+| Rollno | Name         |
++--------+--------------+
+|     93 | Aditya More  |
+|     95 | Sushant More |
+|     98 | NULL         |
++--------+--------------+
+3 rows in set (0.00 sec)
+
+
+
+
+
+-------------------- INDEXES -----------------------------
+
+mysql> CREATE INDEX I1 ON STUDENT (Rollno);
+Query OK, 0 rows affected (0.07 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> CREATE INDEX I2 ON STUDENT (Rollno,Name);
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> create unique index i3 on STUDENT (Rollno);
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> create unique index i3 on COURSE (Roll);
+ERROR 1062 (23000): Duplicate entry '93' for key 'COURSE.i3'
+mysql> 
+
+
+
+

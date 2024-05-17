@@ -1,0 +1,90 @@
+mysql> use ARAMO;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+Database changed
+
+
+
+mysql> CREATE TABLE EMPLOYEE (Emp_name varchar(50), City varchar(50));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> INSERT INTO EMPLOYEE VALUES ('Hari','Pune'),('Om','Mumbai'),('Ram','Nashik');
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO EMPLOYEE values('Smith','Kopargaon');
+Query OK, 1 row affected (0.01 sec)
+
+
+
+mysql> CREATE TABLE EMPLOYEE_SALARY (Emp_name varchar(50), Salary int, Department varchar(50));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into EMPLOYEE_SALARY values ('Hari',1000,'Sales'),('Om',2000,'Sales'),('Sai',3000,'Production');
+Query OK, 3 rows affected (0.02 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO EMPLOYEE_SALARY VALUES ('Joy',4000,'Testing');
+Query OK, 1 row affected (0.02 sec)
+
+
+
+mysql> SELECT * FROM EMPLOYEE;
++----------+-----------+
+| Emp_name | City      |
++----------+-----------+
+| Hari     | Pune      |
+| Om       | Mumbai    |
+| Ram      | Nashik    |
+| Smith    | Kopargaon |
++----------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE_SALARY;
++----------+--------+------------+
+| Emp_name | Salary | Department |
++----------+--------+------------+
+| Hari     |   1000 | Sales      |
+| Om       |   2000 | Sales      |
+| Sai      |   3000 | Production |
+| Joy      |   4000 | Testing    |
++----------+--------+------------+
+4 rows in set (0.00 sec)
+
+
+
+mysql> SELECT EMPLOYEE.Emp_name, EMPLOYEE_SALARY.Salary FROM EMPLOYEE INNER JOIN EMPLOYEE_SALARY ON EMPLOYEE.Emp_name=EMPLOYEE_SALARY.Emp_name;    ---------------------- INNER JOIN
++----------+--------+
+| Emp_name | Salary |
++----------+--------+
+| Hari     |   1000 |
+| Om       |   2000 |
++----------+--------+
+2 rows in set (0.00 sec)
+
+
+
+mysql> SELECT EMPLOYEE.Emp_name, EMPLOYEE_SALARY.Salary FROM EMPLOYEE LEFT OUTER JOIN EMPLOYEE_SALARY ON EMPLOYEE.Emp_name=EMPLOYEE_SALARY.Emp_name;  ----------------- LEFT OUTER JOIN
++----------+--------+
+| Emp_name | Salary |
++----------+--------+
+| Hari     |   1000 |
+| Om       |   2000 |
+| Ram      |   NULL |
+| Smith    |   NULL |
++----------+--------+
+4 rows in set (0.00 sec)
+
+
+
+mysql> SELECT EMPLOYEE.Emp_name, EMPLOYEE_SALARY.Salary FROM EMPLOYEE RIGHT OUTER JOIN EMPLOYEE_SALARY ON EMPLOYEE.Emp_name=EMPLOYEE_SALARY.Emp_name;  -------------- RIGHT OUTER JOIN
++----------+--------+
+| Emp_name | Salary |
++----------+--------+
+| Hari     |   1000 |
+| Om       |   2000 |
+| NULL     |   3000 |
+| NULL     |   4000 |
++----------+--------+
+4 rows in set (0.01 sec)
+

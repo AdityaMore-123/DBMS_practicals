@@ -1,0 +1,186 @@
+
+student@student-MS-7D48:~$ sudo mysql -u root -p;
+[sudo] password for student: 
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 10
+Server version: 8.0.36-0ubuntu0.20.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| Employee           |
+| K12                |
+| abc                |
+| ass5               |
+| bank               |
+| demo               |
+| gokul              |
+| information_schema |
+| k12                |
+| kalyani12          |
+| kalyani72          |
+| lib                |
+| mysql              |
+| performance_schema |
+| siya               |
+| sp                 |
+| sru                |
+| srush              |
+| ss                 |
+| sss                |
+| sys                |
++--------------------+
+21 rows in set (0.00 sec)
+
+mysql> use gokul;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables;
++-----------------+
+| Tables_in_gokul |
++-----------------+
+| Department      |
+| Employee        |
+| Lib_Audit       |
+| Library         |
+| a               |
+| account         |
+| b               |
+| borrower        |
+| branch          |
+| customer        |
+| depositor       |
+| dept            |
+| emp             |
+| emp1            |
+| empsal          |
+| fine            |
+| library         |
+| loan            |
+| project         |
+| student         |
+| v1              |
++-----------------+
+21 rows in set (0.00 sec)
+
+mysql> create table stud1(rollno1 int , name1 varchar(20), class1 varchar(20));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc stud1;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| rollno1 | int         | YES  |     | NULL    |       |
+| name1   | varchar(20) | YES  |     | NULL    |       |
+| class1  | varchar(20) | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+
+
+mysql> create table stud2(rollno2 int , name2 varchar(20), class2 varchar(20));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> desc stud2;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| rollno2 | int         | YES  |     | NULL    |       |
+| name2   | varchar(20) | YES  |     | NULL    |       |
+| class2  | varchar(20) | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+
+
+
+mysql> insert into stud1 values(1,'Krishna','SY'),(2,'Gokul','FY'),(3,'Prasad','TY'),(4,'Shreyas','btech'),(5,'Rahul','SY');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from stud1;
++---------+---------+--------+
+| rollno1 | name1   | class1 |
++---------+---------+--------+
+|       1 | Krishna | SY     |
+|       2 | Gokul   | FY     |
+|       3 | Prasad  | TY     |
+|       4 | Shreyas | btech  |
+|       5 | Rahul   | SY     |
++---------+---------+--------+
+5 rows in set (0.00 sec)
+
+
+
+mysql> insert into stud1 values(1,'Krishna','SY'),(2,'Gokul','FY'),(3,'Prasad','TY'),(4,'Shreyas','btech'),(5,'Rahul','SY');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from stud1;
++---------+---------+--------+
+| rollno1 | name1   | class1 |
++---------+---------+--------+
+|       1 | Krishna | SY     |
+|       2 | Gokul   | FY     |
+|       3 | Prasad  | TY     |
+|       4 | Shreyas | btech  |
+|       5 | Rahul   | SY     |
++---------+---------+--------+
+5 rows in set (0.00 sec)
+
+
+
+
+
+
+
+
+
+
+
+create file and save by cursor.sql
+
+explain me the below sql file for cursor
+
+delimiter //
+create procedure proc_copy()
+   begin
+   declare vfinished int default 0;
+   declare r int;
+   declare n char(20);
+   declare c char(10);
+   
+   
+   declare stud_cursor cursor for select * from stud1;
+   
+   declare continue handler for NOT FOUND set vfinished=1;
+   
+   open stud_cursor;
+     getdata:loop
+     
+     
+   fetch stud_cursor into r,n,c;
+   
+   if vfinished=1 then
+    leave getdata;
+   end if;
+   
+   insert into stud2 values(r,n,c);
+   end loop getdata;
+   
+   close stud_cursor;
+   
+   end;
+   //

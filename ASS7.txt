@@ -1,0 +1,222 @@
+ASS7_TERMINAL
+
+*NOTEPAD CODE :
+
+delimiter //
+create procedure calfine3(rno int, nbook char(20))
+begin
+declare no_of_days int;
+declare fineamount int;
+declare date1 date;
+select Date_of_issue into date1 from LIBRARY where rollno=rno and Name_of_book=nbook;
+set no_of_days=datediff(curdate(),date1);
+if no_of_days>15 and no_of_days<30 then set fineamount=(no_of_days-15)*5;
+end if;
+if no_of_days>30 then
+set fineamount=((no_of_days-15)-(no_of_days-30))*5 + (no_of_days-30)*50;
+end if;
+select concat ('Fine is : ', fineamount);
+if fineamount>0 then
+insert into FINE values (rno,curdate(),fineamount);
+update LIBRARY set status='R' where (rollno=rno);
+end if;
+end
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*TERMINAL :
+
+(base) student@student-MS-7D48:~$ sudo mysql -u root -p
+[sudo] password for student:
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 8.0.36-0ubuntu0.20.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| ab                 |
+| abc                |
+| all1               |
+| am88               |
+| ass7               |
+| chetan             |
+| company            |
+| hh                 |
+| information_schema |
+| jn                 |
+| joint              |
+| joints             |
+| mayuri             |
+| mysql              |
+| performance_schema |
+| sm                 |
+| srd                |
+| sss3               |
+| stud               |
+| student            |
+| sys                |
++--------------------+
+21 rows in set (0.00 sec)
+
+mysql> create database ARAMO;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> USE ARAMO;
+Database changed
+mysql> create table LIBRARY (rollno integer primary key, Date_of_issue date, Name_of_book varchar(250), status char);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table FINE (rollno integer, Date_of_return date, Amount integer, foreign key (rollno) references LIBRARY(rollno));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into LIBRARY values (93,'2024-03-01','DBMS','I'),(98,'2024-03-06','COMPUTER ARCHITECTURE','I'),(103,'2024-04-01','SOFTWARE ENGINEERING','I'),(74,'2024-03-15','RAMAYANA','I');
+Query OK, 4 rows affected (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM LIBRARY;
++--------+---------------+-----------------------+--------+
+| rollno | Date_of_issue | Name_of_book          | status |
++--------+---------------+-----------------------+--------+
+|     74 | 2024-03-15    | RAMAYANA              | I      |
+|     93 | 2024-03-01    | DBMS                  | I      |
+|     98 | 2024-03-06    | COMPUTER ARCHITECTURE | I      |
+|    103 | 2024-04-01    | SOFTWARE ENGINEERING  | I      |
++--------+---------------+-----------------------+--------+
+4 rows in set (0.00 sec)
+
+
+mysql> source /home/student/Desktop/dbms_7.sql
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> call calfine(93,'DBMS');
+    -> //
+ERROR 1054 (42S22): Unknown column 'no' in 'where clause'
+mysql> //
+ERROR:
+No query specified
+
+mysql> call calfine(93,'DBMS');
+    -> //
+ERROR 1054 (42S22): Unknown column 'no' in 'where clause'
+mysql> ;;
+    -> ;;
+    -> ;
+    -> L;
+    ->
+    -> ;;;;;
+    -> ;
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ';;
+;;
+;
+L' at line 1
+mysql> source /home/student/Desktop/dbms_7.sql
+ERROR 1304 (42000): PROCEDURE calfine already exists
+mysql> source /home/student/Desktop/dbms_7.sql
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call calfine(93,'DBMS');
+    -> //
+ERROR 1054 (42S22): Unknown column 'no' in 'where clause'
+mysql> //
+ERROR:
+No query specified
+
+mysql> source /home/student/Desktop/dbms_7.sql
+ERROR 1304 (42000): PROCEDURE calfine1 already exists
+mysql> source /home/student/Desktop/dbms_7.sql
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> call calfine2(93,'DBMS');
+    -> //
+ERROR 1305 (42000): FUNCTION ARAMO.currdate does not exist
+mysql> //
+ERROR:
+No query specified
+
+mysql> source /home/student/Desktop/dbms_7.sql
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> call calfine3(93,'DBMS');
+    -> //
++-----------------------------------+
+| concat ('Fine is : ', fineamount) |
++-----------------------------------+
+| Fine is : 575                     |
++-----------------------------------+
+1 row in set (0.00 sec)
+
+Query OK, 1 row affected (0.02 sec)
+
+mysql> call calfine3(74,'RAMAYANA');
+    -> //
++-----------------------------------+
+| concat ('Fine is : ', fineamount) |
++-----------------------------------+
+| Fine is : 55                      |
++-----------------------------------+
+1 row in set (0.00 sec)
+
+Query OK, 1 row affected (0.01 sec)
+
+mysql> call calfine3(103,'SOFTWARE ENGINEERING');
+    -> //
++-----------------------------------+
+| concat ('Fine is : ', fineamount) |
++-----------------------------------+
+| NULL                              |
++-----------------------------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SELECT * FROM LIBRARY;
+    -> //
++--------+---------------+-----------------------+--------+
+| rollno | Date_of_issue | Name_of_book          | status |
++--------+---------------+-----------------------+--------+
+|     74 | 2024-03-15    | RAMAYANA              | R      |
+|     93 | 2024-03-01    | DBMS                  | R      |
+|     98 | 2024-03-06    | COMPUTER ARCHITECTURE | I      |
+|    103 | 2024-04-01    | SOFTWARE ENGINEERING  | I      |
++--------+---------------+-----------------------+--------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT * FROM FINE;
+    -> //
++--------+----------------+--------+
+| rollno | Date_of_return | Amount |
++--------+----------------+--------+
+|     93 | 2024-04-10     |    575 |
+|     74 | 2024-04-10     |     55 |
++--------+----------------+--------+
+2 rows in set (0.00 sec)
+
+mysql>

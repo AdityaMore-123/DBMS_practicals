@@ -1,0 +1,229 @@
+mysql> create database ARAMO;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> USE ARAMO;
+Database changed
+mysql> SHOW TABLES;
+Empty set (0.00 sec)
+
+mysql> CREATE TABLE STUDENT(Rollno int, Name varchar(50), Class varchar(50));;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> desc STUDENT;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| Rollno | int         | YES  |     | NULL    |       |
+| Name   | varchar(50) | YES  |     | NULL    |       |
+| Class  | varchar(50) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> insert into STUDENT values(93, 'Aditya more', 'FY');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO STUDENT VALUES(103, 'Kunal Pathak', 'SY'),(98,'Sachin Pachore','TY');
+Query OK, 2 rows affected (0.02 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO STUDENT VALUES(95, 'Sushant More', 'SY'),(74,'Kartik kale','TY');
+Query OK, 2 rows affected (0.03 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from STUDENT;
++--------+----------------+-------+
+| Rollno | Name           | Class |
++--------+----------------+-------+
+|     93 | Aditya more    | FY    |
+|    103 | Kunal Pathak   | SY    |
+|     98 | Sachin Pachore | TY    |
+|     95 | Sushant More   | SY    |
+|     74 | Kartik kale    | TY    |
++--------+----------------+-------+
+5 rows in set (0.00 sec)
+
+mysql> select * from STUDENT where Class='SY';
++--------+--------------+-------+
+| Rollno | Name         | Class |
++--------+--------------+-------+
+|    103 | Kunal Pathak | SY    |
+|     95 | Sushant More | SY    |
++--------+--------------+-------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT Name FROM STUDENT WHERE Class='TY';
++----------------+
+| Name           |
++----------------+
+| Sachin Pachore |
+| Kartik kale    |
++----------------+
+2 rows in set (0.00 sec)
+
+mysql> DELETE FROM STUDENT WHERE Rollno=93;
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from STUDENT;
++--------+----------------+-------+
+| Rollno | Name           | Class |
++--------+----------------+-------+
+|    103 | Kunal Pathak   | SY    |
+|     98 | Sachin Pachore | TY    |
+|     95 | Sushant More   | SY    |
+|     74 | Kartik kale    | TY    |
++--------+----------------+-------+
+4 rows in set (0.00 sec)
+
+mysql> UPDATE STUDENT SET Rollno=75 WHERE Rollno=74;
+Query OK, 1 row affected (0.03 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM STUDENT;
++--------+----------------+-------+
+| Rollno | Name           | Class |
++--------+----------------+-------+
+|    103 | Kunal Pathak   | SY    |
+|     98 | Sachin Pachore | TY    |
+|     95 | Sushant More   | SY    |
+|     75 | Kartik kale    | TY    |
++--------+----------------+-------+
+4 rows in set (0.00 sec)
+
+mysql> ALTER TABLE STUDENT
+    -> DROP COLUMN Class;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc STUDENT;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| Rollno | int         | YES  |     | NULL    |       |
+| Name   | varchar(50) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> ALTER TABLE STUDENT
+    -> ADD Email varchar(25);
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc STUDENT;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| Rollno | int         | YES  |     | NULL    |       |
+| Name   | varchar(50) | YES  |     | NULL    |       |
+| Email  | varchar(25) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> ALTER TABLE STUDENT MODIFY COLUMN Email varchar(50);
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc STUDENT;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| Rollno | int         | YES  |     | NULL    |       |
+| Name   | varchar(50) | YES  |     | NULL    |       |
+| Email  | varchar(50) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> alter table STUDENT add Class varchar(10);
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc STUDENT;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| Rollno | int         | YES  |     | NULL    |       |
+| Name   | varchar(50) | YES  |     | NULL    |       |
+| Email  | varchar(50) | YES  |     | NULL    |       |
+| Class  | varchar(10) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql> DESC STUDENT;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| Rollno | int         | NO   | PRI | NULL    |       |
+| Name   | varchar(50) | YES  |     | NULL    |       |
+| Class  | varchar(50) | YES  |     | NULL    |       |
+| EMAIL  | varchar(50) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> ALTER TABLE STUDENT MODIFY COLUMN Class varchar(10);
+Query OK, 7 rows affected (0.05 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE STUDENT RENAME COLUMN Rollno TO ROLL;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESC STUDENT;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| ROLL  | int         | NO   | PRI | NULL    |       |
+| Name  | varchar(50) | YES  |     | NULL    |       |
+| Class | varchar(10) | YES  |     | NULL    |       |
+| EMAIL | varchar(50) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+
+mysql> SHOW TABLES;
++-----------------+
+| Tables_in_ARAMO |
++-----------------+
+| STUDENT         |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> DROP TABLE STUDENT;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> SHOW TABLES;
+Empty set (0.00 sec)
+
+mysql> CREATE TABLE Salary (Amount int, Name varchar(50));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> INSERT INTO Salary values(10000,'Aditya'),(30000,'Kunal');
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM Salary;
++--------+--------+
+| Amount | Name   |
++--------+--------+
+|  10000 | Aditya |
+|  30000 | Kunal  |
++--------+--------+
+2 rows in set (0.00 sec)
+
+mysql> TRUNCATE Salary;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> SELECT * FROM Salary;
+Empty set (0.00 sec)
+
+mysql> DROP DATABASE ARAMO;
+Query OK, 2 rows affected (0.02 sec)
+
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+
+
+
